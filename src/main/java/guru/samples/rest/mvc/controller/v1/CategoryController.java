@@ -4,11 +4,7 @@ import guru.samples.rest.mvc.api.v1.model.CategoryDTO;
 import guru.samples.rest.mvc.api.v1.model.CategoryListDTO;
 import guru.samples.rest.mvc.service.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import static guru.samples.rest.mvc.controller.v1.CategoryController.BASE_URL;
 import static org.springframework.http.HttpStatus.OK;
@@ -27,12 +23,14 @@ public class CategoryController {
     }
 
     @GetMapping
-    public ResponseEntity<CategoryListDTO> findAll() {
-        return new ResponseEntity<>(new CategoryListDTO(categoryService.findAll()), OK);
+    @ResponseStatus(OK)
+    public CategoryListDTO findAll() {
+        return new CategoryListDTO(categoryService.findAll());
     }
 
     @GetMapping("/{name}")
-    public ResponseEntity<CategoryDTO> findByName(@PathVariable String name) {
-        return new ResponseEntity<>(categoryService.findByName(name), OK);
+    @ResponseStatus(OK)
+    public CategoryDTO findByName(@PathVariable String name) {
+        return categoryService.findByName(name);
     }
 }
