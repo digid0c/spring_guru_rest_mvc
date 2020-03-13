@@ -7,12 +7,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import static guru.samples.rest.mvc.controller.v1.CustomerController.BASE_URL;
 import static org.springframework.http.HttpStatus.CREATED;
 import static org.springframework.http.HttpStatus.OK;
 
 @RestController
-@RequestMapping("/api/v1/customers")
+@RequestMapping(BASE_URL)
 public class CustomerController {
+
+    public static final String BASE_URL = "/api/v1/customers";
 
     private final CustomerService customerService;
 

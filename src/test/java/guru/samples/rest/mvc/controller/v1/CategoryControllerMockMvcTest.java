@@ -10,6 +10,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.List;
 
+import static guru.samples.rest.mvc.controller.v1.CategoryController.BASE_URL;
 import static java.util.Arrays.asList;
 import static org.hamcrest.Matchers.*;
 import static org.mockito.Mockito.when;
@@ -24,6 +25,8 @@ public class CategoryControllerMockMvcTest {
 
     private static final Long CATEGORY_ID = 1L;
     private static final String CATEGORY_NAME = "test";
+
+    private static final String BASE_URL_WITH_CATEGORY_NAME = BASE_URL + "/" + CATEGORY_NAME;
 
     @Mock
     private CategoryService categoryService;
@@ -44,7 +47,7 @@ public class CategoryControllerMockMvcTest {
         List<CategoryDTO> categories = asList(new CategoryDTO(), new CategoryDTO(), new CategoryDTO());
         when(categoryService.findAll()).thenReturn(categories);
 
-        mockMvc.perform(get("/api/v1/categories")
+        mockMvc.perform(get(BASE_URL)
                 .contentType(APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.categories", hasSize(categories.size())));
@@ -58,7 +61,7 @@ public class CategoryControllerMockMvcTest {
                 .build();
         when(categoryService.findByName(CATEGORY_NAME)).thenReturn(category);
 
-        mockMvc.perform(get("/api/v1/categories/test")
+        mockMvc.perform(get(BASE_URL_WITH_CATEGORY_NAME)
                 .contentType(APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id", is(equalTo(CATEGORY_ID.intValue()))))

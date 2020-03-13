@@ -10,6 +10,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.List;
 
+import static guru.samples.rest.mvc.controller.v1.CustomerController.BASE_URL;
 import static guru.samples.rest.mvc.controller.v1.RestControllerMockMvcTestHelper.asJsonString;
 import static java.util.Arrays.asList;
 import static org.hamcrest.Matchers.*;
@@ -30,6 +31,8 @@ public class CustomerControllerMockMvcTest {
     private static final String CUSTOMER_FIRST_NAME = "Sam";
     private static final String CUSTOMER_LAST_NAME = "Newman";
 
+    private static final String BASE_URL_WITH_CUSTOMER_ID = BASE_URL + "/" + CUSTOMER_ID;
+
     @Mock
     private CustomerService customerService;
 
@@ -49,7 +52,7 @@ public class CustomerControllerMockMvcTest {
         List<CustomerDTO> customers = asList(new CustomerDTO(), new CustomerDTO(), new CustomerDTO());
         when(customerService.findAll()).thenReturn(customers);
 
-        mockMvc.perform(get("/api/v1/customers")
+        mockMvc.perform(get(BASE_URL)
                 .contentType(APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.customers", hasSize(customers.size())));
@@ -60,7 +63,7 @@ public class CustomerControllerMockMvcTest {
         CustomerDTO customer = createExistingCustomer();
         when(customerService.findById(CUSTOMER_ID)).thenReturn(customer);
 
-        mockMvc.perform(get("/api/v1/customers/1")
+        mockMvc.perform(get(BASE_URL_WITH_CUSTOMER_ID)
                 .contentType(APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id", is(equalTo(CUSTOMER_ID.intValue()))))
@@ -74,7 +77,7 @@ public class CustomerControllerMockMvcTest {
         CustomerDTO existingCustomer = createExistingCustomer();
         when(customerService.create(any(CustomerDTO.class))).thenReturn(existingCustomer);
 
-        mockMvc.perform(post("/api/v1/customers")
+        mockMvc.perform(post(BASE_URL)
                 .contentType(APPLICATION_JSON)
                 .content(asJsonString(customerToCreate)))
                 .andExpect(status().isCreated())
@@ -89,7 +92,7 @@ public class CustomerControllerMockMvcTest {
         CustomerDTO existingCustomer = createExistingCustomer();
         when(customerService.update(eq(CUSTOMER_ID), any(CustomerDTO.class))).thenReturn(existingCustomer);
 
-        mockMvc.perform(put("/api/v1/customers/1")
+        mockMvc.perform(put(BASE_URL_WITH_CUSTOMER_ID)
                 .contentType(APPLICATION_JSON)
                 .content(asJsonString(customerToUpdate)))
                 .andExpect(status().isOk())
@@ -104,7 +107,7 @@ public class CustomerControllerMockMvcTest {
         CustomerDTO existingCustomer = createExistingCustomer();
         when(customerService.patch(eq(CUSTOMER_ID), any(CustomerDTO.class))).thenReturn(existingCustomer);
 
-        mockMvc.perform(patch("/api/v1/customers/1")
+        mockMvc.perform(patch(BASE_URL_WITH_CUSTOMER_ID)
                 .contentType(APPLICATION_JSON)
                 .content(asJsonString(customerToPatch)))
                 .andExpect(status().isOk())
@@ -115,7 +118,7 @@ public class CustomerControllerMockMvcTest {
 
     @Test
     public void shouldDeleteExistingCustomer() throws Exception {
-        mockMvc.perform(delete("/api/v1/customers/1")
+        mockMvc.perform(delete(BASE_URL_WITH_CUSTOMER_ID)
                 .contentType(APPLICATION_JSON))
                 .andExpect(status().isOk());
 
