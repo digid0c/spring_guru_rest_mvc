@@ -29,4 +29,20 @@ public class CustomerMapperUnitTest {
         assertThat(customerDTO.getFirstName(), is(equalTo(CUSTOMER_FIRST_NAME)));
         assertThat(customerDTO.getLastName(), is(equalTo(CUSTOMER_LAST_NAME)));
     }
+
+    @Test
+    public void shouldMapCustomerDTOToCustomer() {
+        CustomerDTO customerDTO = CustomerDTO.builder()
+                .id(CUSTOMER_ID)
+                .firstName(CUSTOMER_FIRST_NAME)
+                .lastName(CUSTOMER_LAST_NAME)
+                .build();
+
+        Customer customer = CUSTOMER_MAPPER.customerDTOToCustomer(customerDTO);
+
+        assertThat(customer, is(notNullValue()));
+        assertThat(customer.getId(), is(equalTo(CUSTOMER_ID)));
+        assertThat(customer.getFirstName(), is(equalTo(CUSTOMER_FIRST_NAME)));
+        assertThat(customer.getLastName(), is(equalTo(CUSTOMER_LAST_NAME)));
+    }
 }

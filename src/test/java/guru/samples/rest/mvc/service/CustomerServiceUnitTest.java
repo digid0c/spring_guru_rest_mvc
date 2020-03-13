@@ -14,6 +14,7 @@ import java.util.Optional;
 import static java.util.Arrays.asList;
 import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
 
@@ -47,11 +48,7 @@ public class CustomerServiceUnitTest {
 
     @Test
     public void shouldFindCustomerById() {
-        Customer customer = Customer.builder()
-                .id(CUSTOMER_ID)
-                .firstName(CUSTOMER_FIRST_NAME)
-                .lastName(CUSTOMER_LAST_NAME)
-                .build();
+        Customer customer = createExistingCustomer();
         when(customerRepository.findById(CUSTOMER_ID)).thenReturn(Optional.of(customer));
 
         CustomerDTO customerDTO = tested.findById(CUSTOMER_ID);
@@ -60,5 +57,30 @@ public class CustomerServiceUnitTest {
         assertThat(customerDTO.getId(), is(equalTo(CUSTOMER_ID)));
         assertThat(customerDTO.getFirstName(), is(equalTo(CUSTOMER_FIRST_NAME)));
         assertThat(customerDTO.getLastName(), is(equalTo(CUSTOMER_LAST_NAME)));
+    }
+
+    @Test
+    public void shouldCreateNewCustomer() {
+        CustomerDTO customerToCreate = CustomerDTO.builder()
+                .firstName(CUSTOMER_FIRST_NAME)
+                .lastName(CUSTOMER_LAST_NAME)
+                .build();
+        Customer existingCustomer = createExistingCustomer();
+        when(customerRepository.save(any(Customer.class))).thenReturn(existingCustomer);
+
+        CustomerDTO createdCustomerDTO = tested.create(customerToCreate);
+
+        assertThat(createdCustomerDTO, is(notNullValue()));
+        assertThat(createdCustomerDTO.getId(), is(equalTo(CUSTOMER_ID)));
+        assertThat(createdCustomerDTO.getFirstName(), is(equalTo(CUSTOMER_FIRST_NAME)));
+        assertThat(createdCustomerDTO.getLastName(), is(equalTo(CUSTOMER_LAST_NAME)));
+    }
+
+    private Customer createExistingCustomer() {
+        return Customer.builder()
+                .id(CUSTOMER_ID)
+                .firstName(CUSTOMER_FIRST_NAME)
+                .lastName(CUSTOMER_LAST_NAME)
+                .build();
     }
 }

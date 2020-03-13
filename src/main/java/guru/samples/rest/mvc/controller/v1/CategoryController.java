@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import static org.springframework.http.HttpStatus.OK;
 
 @RestController
-@RequestMapping("/api/v1/categories/")
+@RequestMapping("/api/v1/categories")
 public class CategoryController {
 
     private final CategoryService categoryService;
@@ -28,7 +28,7 @@ public class CategoryController {
         return new ResponseEntity<>(new CategoryListDTO(categoryService.findAll()), OK);
     }
 
-    @GetMapping("{name}")
+    @GetMapping("/{name}")
     public ResponseEntity<CategoryDTO> findByName(@PathVariable String name) {
         return new ResponseEntity<>(categoryService.findByName(name), OK);
     }

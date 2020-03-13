@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 import static java.util.stream.Collectors.toList;
 
@@ -33,6 +34,15 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     public CustomerDTO findById(Long id) {
         return customerRepository.findById(id)
+                .map(customerMapper::customerToCustomerDTO)
+                .orElseThrow(RuntimeException::new);
+    }
+
+    @Override
+    public CustomerDTO create(CustomerDTO customerDTO) {
+        return Optional.of(customerDTO)
+                .map(customerMapper::customerDTOToCustomer)
+                .map(customerRepository::save)
                 .map(customerMapper::customerToCustomerDTO)
                 .orElseThrow(RuntimeException::new);
     }
