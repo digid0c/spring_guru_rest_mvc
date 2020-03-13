@@ -97,6 +97,21 @@ public class CustomerControllerMockMvcTest {
                 .andExpect(jsonPath("$.lastName", is(equalTo(CUSTOMER_LAST_NAME))));
     }
 
+    @Test
+    public void shouldPatchExistingCustomer() throws Exception {
+        CustomerDTO customerToPatch = createIncomingRequestCustomerData();
+        CustomerDTO existingCustomer = createExistingCustomer();
+        when(customerService.patch(eq(CUSTOMER_ID), any(CustomerDTO.class))).thenReturn(existingCustomer);
+
+        mockMvc.perform(patch("/api/v1/customers/1")
+                .contentType(APPLICATION_JSON)
+                .content(asJsonString(customerToPatch)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id", is(equalTo(CUSTOMER_ID.intValue()))))
+                .andExpect(jsonPath("$.firstName", is(equalTo(CUSTOMER_FIRST_NAME))))
+                .andExpect(jsonPath("$.lastName", is(equalTo(CUSTOMER_LAST_NAME))));
+    }
+
     private CustomerDTO createExistingCustomer() {
         return CustomerDTO.builder()
                 .id(CUSTOMER_ID)

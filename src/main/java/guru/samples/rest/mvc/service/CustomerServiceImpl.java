@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 
+import static java.util.Optional.ofNullable;
 import static java.util.stream.Collectors.toList;
 
 @Service
@@ -47,6 +48,17 @@ public class CustomerServiceImpl implements CustomerService {
     public CustomerDTO update(Long customerId, CustomerDTO customerDTO) {
         customerDTO.setId(customerId);
         return createOrUpdate(customerDTO);
+    }
+
+    @Override
+    public CustomerDTO patch(Long customerId, CustomerDTO customerDTO) {
+        return customerRepository.findById(customerId)
+                .map(customer -> {
+                    ofNullable(customerDTO.getFirstName()).ifPresent(customer::setFirstName);
+                    ofNullable(customerDTO.getLastName()).ifPresent(customer::setLastName);
+                    return customerMapper.customerToCustomerDTO(customerRepository.save(customer));
+                })
+                .orElseThrow(RuntimeException::new);
     }
 
     private CustomerDTO createOrUpdate(CustomerDTO customerDTO) {
