@@ -15,6 +15,7 @@ import static java.util.Arrays.asList;
 import static org.hamcrest.Matchers.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
@@ -110,6 +111,15 @@ public class CustomerControllerMockMvcTest {
                 .andExpect(jsonPath("$.id", is(equalTo(CUSTOMER_ID.intValue()))))
                 .andExpect(jsonPath("$.firstName", is(equalTo(CUSTOMER_FIRST_NAME))))
                 .andExpect(jsonPath("$.lastName", is(equalTo(CUSTOMER_LAST_NAME))));
+    }
+
+    @Test
+    public void shouldDeleteExistingCustomer() throws Exception {
+        mockMvc.perform(delete("/api/v1/customers/1")
+                .contentType(APPLICATION_JSON))
+                .andExpect(status().isOk());
+
+        verify(customerService).delete(CUSTOMER_ID);
     }
 
     private CustomerDTO createExistingCustomer() {

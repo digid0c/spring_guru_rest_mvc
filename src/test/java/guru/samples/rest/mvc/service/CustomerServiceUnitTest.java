@@ -15,6 +15,7 @@ import static java.util.Arrays.asList;
 import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
 
@@ -85,6 +86,13 @@ public class CustomerServiceUnitTest {
         assertThat(updatedCustomerDTO.getId(), is(equalTo(CUSTOMER_ID)));
         assertThat(updatedCustomerDTO.getFirstName(), is(equalTo(CUSTOMER_FIRST_NAME)));
         assertThat(updatedCustomerDTO.getLastName(), is(equalTo(CUSTOMER_LAST_NAME)));
+    }
+
+    @Test
+    public void shouldDeleteExistingCustomer() {
+        tested.delete(CUSTOMER_ID);
+
+        verify(customerRepository).deleteById(CUSTOMER_ID);
     }
 
     private Customer createExistingCustomer() {
