@@ -2,6 +2,7 @@ package guru.samples.rest.mvc.service;
 
 import guru.samples.rest.mvc.api.v1.mapper.CustomerMapper;
 import guru.samples.rest.mvc.api.v1.model.CustomerDTO;
+import guru.samples.rest.mvc.exception.ResourceNotFoundException;
 import guru.samples.rest.mvc.repository.CustomerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -36,7 +37,7 @@ public class CustomerServiceImpl implements CustomerService {
     public CustomerDTO findById(Long id) {
         return customerRepository.findById(id)
                 .map(customerMapper::customerToCustomerDTO)
-                .orElseThrow(RuntimeException::new);
+                .orElseThrow(ResourceNotFoundException::new);
     }
 
     @Override
@@ -58,7 +59,7 @@ public class CustomerServiceImpl implements CustomerService {
                     ofNullable(customerDTO.getLastName()).ifPresent(customer::setLastName);
                     return customerMapper.customerToCustomerDTO(customerRepository.save(customer));
                 })
-                .orElseThrow(RuntimeException::new);
+                .orElseThrow(ResourceNotFoundException::new);
     }
 
     @Override
@@ -71,6 +72,6 @@ public class CustomerServiceImpl implements CustomerService {
                 .map(customerMapper::customerDTOToCustomer)
                 .map(customerRepository::save)
                 .map(customerMapper::customerToCustomerDTO)
-                .orElseThrow(RuntimeException::new);
+                .orElseThrow(ResourceNotFoundException::new);
     }
 }

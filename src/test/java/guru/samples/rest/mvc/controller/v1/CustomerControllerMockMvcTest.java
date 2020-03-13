@@ -1,6 +1,8 @@
 package guru.samples.rest.mvc.controller.v1;
 
 import guru.samples.rest.mvc.api.v1.model.CustomerDTO;
+import guru.samples.rest.mvc.exception.ResourceNotFoundException;
+import guru.samples.rest.mvc.exception.handler.RestResponseEntityExceptionHandler;
 import guru.samples.rest.mvc.service.CustomerService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -44,7 +46,9 @@ public class CustomerControllerMockMvcTest {
     @BeforeEach
     public void setUp() {
         initMocks(this);
-        mockMvc = standaloneSetup(tested).build();
+        mockMvc = standaloneSetup(tested)
+                .setControllerAdvice(new RestResponseEntityExceptionHandler())
+                .build();
     }
 
     @Test
@@ -123,6 +127,15 @@ public class CustomerControllerMockMvcTest {
                 .andExpect(status().isOk());
 
         verify(customerService).delete(CUSTOMER_ID);
+    }
+
+    @Test
+    public void shouldThrowResourceNotFoundException() throws Exception {
+        when(customerService.findById(CUSTOMER_ID)).thenThrow(ResourceNotFoundException.class);
+
+        mockMvc.perform(get(BASE_URL_WITH_CUSTOMER_ID)
+                .contentType(APPLICATION_JSON))
+                .andExpect(status().isNotFound());
     }
 
     private CustomerDTO createExistingCustomer() {

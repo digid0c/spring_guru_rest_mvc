@@ -4,6 +4,7 @@ import guru.samples.rest.mvc.api.v1.mapper.CustomerMapper;
 import guru.samples.rest.mvc.api.v1.model.CustomerDTO;
 import guru.samples.rest.mvc.bootstrap.BootstrapDataLoader;
 import guru.samples.rest.mvc.domain.Customer;
+import guru.samples.rest.mvc.exception.ResourceNotFoundException;
 import guru.samples.rest.mvc.repository.CategoryRepository;
 import guru.samples.rest.mvc.repository.CustomerRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -43,7 +44,7 @@ public class CustomerServiceIntegrationTest {
         Long customerId = getCustomerId();
 
         Customer originalCustomer = customerRepository.findById(customerId)
-                .orElseThrow(RuntimeException::new);
+                .orElseThrow(ResourceNotFoundException::new);
         CustomerDTO customerToPatch = CustomerDTO.builder()
                 .firstName(newFirstName)
                 .build();
@@ -66,7 +67,7 @@ public class CustomerServiceIntegrationTest {
         Long customerId = getCustomerId();
 
         Customer originalCustomer = customerRepository.findById(customerId)
-                .orElseThrow(RuntimeException::new);
+                .orElseThrow(ResourceNotFoundException::new);
         CustomerDTO customerToPatch = CustomerDTO.builder()
                 .lastName(newLastName)
                 .build();
