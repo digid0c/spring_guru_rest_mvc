@@ -61,10 +61,7 @@ public class CustomerServiceUnitTest {
 
     @Test
     public void shouldCreateNewCustomer() {
-        CustomerDTO customerToCreate = CustomerDTO.builder()
-                .firstName(CUSTOMER_FIRST_NAME)
-                .lastName(CUSTOMER_LAST_NAME)
-                .build();
+        CustomerDTO customerToCreate = createIncomingRequestCustomerData();
         Customer existingCustomer = createExistingCustomer();
         when(customerRepository.save(any(Customer.class))).thenReturn(existingCustomer);
 
@@ -76,9 +73,30 @@ public class CustomerServiceUnitTest {
         assertThat(createdCustomerDTO.getLastName(), is(equalTo(CUSTOMER_LAST_NAME)));
     }
 
+    @Test
+    public void shouldUpdateExistingCustomer() {
+        CustomerDTO customerToUpdate = createIncomingRequestCustomerData();
+        Customer existingCustomer = createExistingCustomer();
+        when(customerRepository.save(any(Customer.class))).thenReturn(existingCustomer);
+
+        CustomerDTO updatedCustomerDTO = tested.update(CUSTOMER_ID, customerToUpdate);
+
+        assertThat(updatedCustomerDTO, is(notNullValue()));
+        assertThat(updatedCustomerDTO.getId(), is(equalTo(CUSTOMER_ID)));
+        assertThat(updatedCustomerDTO.getFirstName(), is(equalTo(CUSTOMER_FIRST_NAME)));
+        assertThat(updatedCustomerDTO.getLastName(), is(equalTo(CUSTOMER_LAST_NAME)));
+    }
+
     private Customer createExistingCustomer() {
         return Customer.builder()
                 .id(CUSTOMER_ID)
+                .firstName(CUSTOMER_FIRST_NAME)
+                .lastName(CUSTOMER_LAST_NAME)
+                .build();
+    }
+
+    private CustomerDTO createIncomingRequestCustomerData() {
+        return CustomerDTO.builder()
                 .firstName(CUSTOMER_FIRST_NAME)
                 .lastName(CUSTOMER_LAST_NAME)
                 .build();

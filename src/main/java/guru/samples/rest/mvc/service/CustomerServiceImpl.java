@@ -40,6 +40,16 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public CustomerDTO create(CustomerDTO customerDTO) {
+        return createOrUpdate(customerDTO);
+    }
+
+    @Override
+    public CustomerDTO update(Long customerId, CustomerDTO customerDTO) {
+        customerDTO.setId(customerId);
+        return createOrUpdate(customerDTO);
+    }
+
+    private CustomerDTO createOrUpdate(CustomerDTO customerDTO) {
         return Optional.of(customerDTO)
                 .map(customerMapper::customerDTOToCustomer)
                 .map(customerRepository::save)

@@ -14,11 +14,11 @@ import static guru.samples.rest.mvc.controller.v1.RestControllerMockMvcTestHelpe
 import static java.util.Arrays.asList;
 import static org.hamcrest.Matchers.*;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.setup.MockMvcBuilders.standaloneSetup;
@@ -69,10 +69,7 @@ public class CustomerControllerMockMvcTest {
 
     @Test
     public void shouldCreateNewCustomer() throws Exception {
-        CustomerDTO customerToCreate = CustomerDTO.builder()
-                .firstName(CUSTOMER_FIRST_NAME)
-                .lastName(CUSTOMER_LAST_NAME)
-                .build();
+        CustomerDTO customerToCreate = createIncomingRequestCustomerData();
         CustomerDTO existingCustomer = createExistingCustomer();
         when(customerService.create(any(CustomerDTO.class))).thenReturn(existingCustomer);
 
@@ -85,9 +82,31 @@ public class CustomerControllerMockMvcTest {
                 .andExpect(jsonPath("$.lastName", is(equalTo(CUSTOMER_LAST_NAME))));
     }
 
+    @Test
+    public void shouldUpdateExistingCustomer() throws Exception {
+        CustomerDTO customerToUpdate = createIncomingRequestCustomerData();
+        CustomerDTO existingCustomer = createExistingCustomer();
+        when(customerService.update(eq(CUSTOMER_ID), any(CustomerDTO.class))).thenReturn(existingCustomer);
+
+        mockMvc.perform(put("/api/v1/customers/1")
+                .contentType(APPLICATION_JSON)
+                .content(asJsonString(customerToUpdate)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id", is(equalTo(CUSTOMER_ID.intValue()))))
+                .andExpect(jsonPath("$.firstName", is(equalTo(CUSTOMER_FIRST_NAME))))
+                .andExpect(jsonPath("$.lastName", is(equalTo(CUSTOMER_LAST_NAME))));
+    }
+
     private CustomerDTO createExistingCustomer() {
         return CustomerDTO.builder()
                 .id(CUSTOMER_ID)
+                .firstName(CUSTOMER_FIRST_NAME)
+                .lastName(CUSTOMER_LAST_NAME)
+                .build();
+    }
+
+    private CustomerDTO createIncomingRequestCustomerData() {
+        return CustomerDTO.builder()
                 .firstName(CUSTOMER_FIRST_NAME)
                 .lastName(CUSTOMER_LAST_NAME)
                 .build();
