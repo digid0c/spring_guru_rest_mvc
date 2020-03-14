@@ -1,0 +1,40 @@
+package guru.samples.rest.mvc.service;
+
+import guru.samples.rest.mvc.api.v1.mapper.VendorMapper;
+import guru.samples.rest.mvc.api.v1.model.VendorDTO;
+import guru.samples.rest.mvc.exception.ResourceNotFoundException;
+import guru.samples.rest.mvc.repository.VendorRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+
+import static java.util.stream.Collectors.toList;
+
+@Service
+public class VendorServiceImpl implements VendorService {
+
+    private final VendorRepository vendorRepository;
+    private final VendorMapper vendorMapper;
+
+    @Autowired
+    public VendorServiceImpl(VendorRepository vendorRepository, VendorMapper vendorMapper) {
+        this.vendorRepository = vendorRepository;
+        this.vendorMapper = vendorMapper;
+    }
+
+    @Override
+    public List<VendorDTO> findAll() {
+        return vendorRepository.findAll()
+                .stream()
+                .map(vendorMapper::vendorToVendorDTO)
+                .collect(toList());
+    }
+
+    @Override
+    public VendorDTO findById(Long vendorId) {
+        return vendorRepository.findById(vendorId)
+                .map(vendorMapper::vendorToVendorDTO)
+                .orElseThrow(ResourceNotFoundException::new);
+    }
+}
