@@ -12,12 +12,15 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.List;
 
+import static guru.samples.rest.mvc.controller.v1.RestControllerMockMvcTestHelper.asJsonString;
 import static guru.samples.rest.mvc.controller.v1.VendorController.BASE_URL;
 import static java.util.Arrays.asList;
 import static org.hamcrest.Matchers.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -59,9 +62,43 @@ public class VendorControllerMockMvcTest {
                 .andExpect(jsonPath("$.name", is(equalTo(VENDOR_NAME))));
     }
 
+    @Test
+    public void shouldCreateNewVendor() throws Exception {
+        VendorDTO vendorToCreate = createIncomingRequestVendorData();
+        VendorDTO existingVendor = createExistingVendor();
+        when(vendorService.create(any(VendorDTO.class))).thenReturn(existingVendor);
+
+        mockMvc.perform(post(BASE_URL)
+                .contentType(APPLICATION_JSON)
+                .content(asJsonString(vendorToCreate)))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.id", is(equalTo(VENDOR_ID.intValue()))))
+                .andExpect(jsonPath("$.name", is(equalTo(VENDOR_NAME))));
+    }
+
+    @Test
+    public void shouldUpdateExistingVendor() throws Exception {
+        VendorDTO vendorToUpdate = createIncomingRequestVendorData();
+        VendorDTO existingVendor = createExistingVendor();
+        when(vendorService.update(eq(VENDOR_ID), any(VendorDTO.class))).thenReturn(existingVendor);
+
+        mockMvc.perform(put(BASE_URL_WITH_VENDOR_ID)
+                .contentType(APPLICATION_JSON)
+                .content(asJsonString(vendorToUpdate)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id", is(equalTo(VENDOR_ID.intValue()))))
+                .andExpect(jsonPath("$.name", is(equalTo(VENDOR_NAME))));
+    }
+
     private VendorDTO createExistingVendor() {
         return VendorDTO.builder()
                 .id(VENDOR_ID)
+                .name(VENDOR_NAME)
+                .build();
+    }
+
+    private VendorDTO createIncomingRequestVendorData() {
+        return VendorDTO.builder()
                 .name(VENDOR_NAME)
                 .build();
     }

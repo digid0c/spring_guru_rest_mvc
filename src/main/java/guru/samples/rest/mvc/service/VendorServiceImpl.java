@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 import static java.util.stream.Collectors.toList;
 
@@ -34,6 +35,25 @@ public class VendorServiceImpl implements VendorService {
     @Override
     public VendorDTO findById(Long vendorId) {
         return vendorRepository.findById(vendorId)
+                .map(vendorMapper::vendorToVendorDTO)
+                .orElseThrow(ResourceNotFoundException::new);
+    }
+
+    @Override
+    public VendorDTO create(VendorDTO vendorDTO) {
+        return createOrUpdate(vendorDTO);
+    }
+
+    @Override
+    public VendorDTO update(Long vendorId, VendorDTO vendorDTO) {
+        vendorDTO.setId(vendorId);
+        return createOrUpdate(vendorDTO);
+    }
+
+    private VendorDTO createOrUpdate(VendorDTO vendorDTO) {
+        return Optional.of(vendorDTO)
+                .map(vendorMapper::vendorDTOToVendor)
+                .map(vendorRepository::save)
                 .map(vendorMapper::vendorToVendorDTO)
                 .orElseThrow(ResourceNotFoundException::new);
     }

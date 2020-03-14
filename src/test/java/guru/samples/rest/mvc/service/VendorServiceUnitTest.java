@@ -14,6 +14,7 @@ import java.util.Optional;
 import static java.util.Arrays.asList;
 import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
 
@@ -56,9 +57,41 @@ public class VendorServiceUnitTest {
         assertThat(vendorDTO.getName(), is(equalTo(VENDOR_NAME)));
     }
 
+    @Test
+    public void shouldCreateNewVendor() {
+        VendorDTO vendorToCreate = createIncomingRequestVendorData();
+        Vendor existingVendor = createExistingVendor();
+        when(vendorRepository.save(any(Vendor.class))).thenReturn(existingVendor);
+
+        VendorDTO createdVendorDTO = tested.create(vendorToCreate);
+
+        assertThat(createdVendorDTO, is(notNullValue()));
+        assertThat(createdVendorDTO.getId(), is(equalTo(VENDOR_ID)));
+        assertThat(createdVendorDTO.getName(), is(equalTo(VENDOR_NAME)));
+    }
+
+    @Test
+    public void shouldUpdateExistingVendor() {
+        VendorDTO vendorToUpdate = createIncomingRequestVendorData();
+        Vendor existingVendor = createExistingVendor();
+        when(vendorRepository.save(any(Vendor.class))).thenReturn(existingVendor);
+
+        VendorDTO updatedVendorDTO = tested.update(VENDOR_ID, vendorToUpdate);
+
+        assertThat(updatedVendorDTO, is(notNullValue()));
+        assertThat(updatedVendorDTO.getId(), is(equalTo(VENDOR_ID)));
+        assertThat(updatedVendorDTO.getName(), is(equalTo(VENDOR_NAME)));
+    }
+
     private Vendor createExistingVendor() {
         return Vendor.builder()
                 .id(VENDOR_ID)
+                .name(VENDOR_NAME)
+                .build();
+    }
+
+    private VendorDTO createIncomingRequestVendorData() {
+        return VendorDTO.builder()
                 .name(VENDOR_NAME)
                 .build();
     }
