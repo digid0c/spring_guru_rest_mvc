@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 
+import static java.util.Optional.ofNullable;
 import static java.util.stream.Collectors.toList;
 
 @Service
@@ -48,6 +49,21 @@ public class VendorServiceImpl implements VendorService {
     public VendorDTO update(Long vendorId, VendorDTO vendorDTO) {
         vendorDTO.setId(vendorId);
         return createOrUpdate(vendorDTO);
+    }
+
+    @Override
+    public VendorDTO patch(Long vendorId, VendorDTO vendorDTO) {
+        return vendorRepository.findById(vendorId)
+                .map(vendor -> {
+                    ofNullable(vendorDTO.getName()).ifPresent(vendor::setName);
+                    return vendorMapper.vendorToVendorDTO(vendorRepository.save(vendor));
+                })
+                .orElseThrow(ResourceNotFoundException::new);
+    }
+
+    @Override
+    public void delete(Long vendorId) {
+        vendorRepository.deleteById(vendorId);
     }
 
     private VendorDTO createOrUpdate(VendorDTO vendorDTO) {

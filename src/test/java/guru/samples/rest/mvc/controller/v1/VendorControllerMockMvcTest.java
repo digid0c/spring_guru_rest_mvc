@@ -1,6 +1,7 @@
 package guru.samples.rest.mvc.controller.v1;
 
 import guru.samples.rest.mvc.api.v1.model.VendorDTO;
+import guru.samples.rest.mvc.exception.ResourceNotFoundException;
 import guru.samples.rest.mvc.service.VendorService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -18,6 +19,7 @@ import static java.util.Arrays.asList;
 import static org.hamcrest.Matchers.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -88,6 +90,24 @@ public class VendorControllerMockMvcTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id", is(equalTo(VENDOR_ID.intValue()))))
                 .andExpect(jsonPath("$.name", is(equalTo(VENDOR_NAME))));
+    }
+
+    @Test
+    public void shouldDeleteExistingVendor() throws Exception {
+        mockMvc.perform(delete(BASE_URL_WITH_VENDOR_ID)
+                .contentType(APPLICATION_JSON))
+                .andExpect(status().isOk());
+
+        verify(vendorService).delete(VENDOR_ID);
+    }
+
+    @Test
+    public void shouldThrowResourceNotFoundException() throws Exception {
+        when(vendorService.findById(VENDOR_ID)).thenThrow(ResourceNotFoundException.class);
+
+        mockMvc.perform(get(BASE_URL_WITH_VENDOR_ID)
+                .contentType(APPLICATION_JSON))
+                .andExpect(status().isNotFound());
     }
 
     private VendorDTO createExistingVendor() {

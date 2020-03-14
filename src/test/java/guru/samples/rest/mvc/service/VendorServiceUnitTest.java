@@ -15,6 +15,7 @@ import static java.util.Arrays.asList;
 import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
 
@@ -81,6 +82,13 @@ public class VendorServiceUnitTest {
         assertThat(updatedVendorDTO, is(notNullValue()));
         assertThat(updatedVendorDTO.getId(), is(equalTo(VENDOR_ID)));
         assertThat(updatedVendorDTO.getName(), is(equalTo(VENDOR_NAME)));
+    }
+
+    @Test
+    public void shouldDeleteExistingVendor() {
+        tested.delete(VENDOR_ID);
+
+        verify(vendorRepository).deleteById(VENDOR_ID);
     }
 
     private Vendor createExistingVendor() {
