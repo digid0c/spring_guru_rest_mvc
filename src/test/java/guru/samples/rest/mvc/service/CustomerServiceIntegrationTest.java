@@ -7,6 +7,7 @@ import guru.samples.rest.mvc.domain.Customer;
 import guru.samples.rest.mvc.exception.ResourceNotFoundException;
 import guru.samples.rest.mvc.repository.CategoryRepository;
 import guru.samples.rest.mvc.repository.CustomerRepository;
+import guru.samples.rest.mvc.repository.VendorRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -28,11 +29,14 @@ public class CustomerServiceIntegrationTest {
     @Autowired
     private CategoryRepository categoryRepository;
 
+    @Autowired
+    private VendorRepository vendorRepository;
+
     private CustomerService tested;
 
     @BeforeEach
     public void setUp() {
-        BootstrapDataLoader bootstrapDataLoader = new BootstrapDataLoader(categoryRepository, customerRepository);
+        BootstrapDataLoader bootstrapDataLoader = new BootstrapDataLoader(categoryRepository, customerRepository, vendorRepository);
         bootstrapDataLoader.run();
 
         tested = new CustomerServiceImpl(customerRepository, CustomerMapper.INSTANCE);
