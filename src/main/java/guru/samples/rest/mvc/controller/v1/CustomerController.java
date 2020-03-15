@@ -12,7 +12,7 @@ import static guru.samples.rest.mvc.controller.v1.CustomerController.BASE_URL;
 import static org.springframework.http.HttpStatus.CREATED;
 import static org.springframework.http.HttpStatus.OK;
 
-@Api(value = "This API allows to perform CRUD operations with customers")
+@Api(description = "This API allows to perform CRUD operations with customers")
 @RestController
 @RequestMapping(BASE_URL)
 public class CustomerController {
