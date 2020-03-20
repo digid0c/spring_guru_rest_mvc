@@ -57,6 +57,7 @@ public class CustomerControllerMockMvcTest {
         when(customerService.findAll()).thenReturn(customers);
 
         mockMvc.perform(get(BASE_URL)
+                .accept(APPLICATION_JSON)
                 .contentType(APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.customers", hasSize(customers.size())));
@@ -68,6 +69,7 @@ public class CustomerControllerMockMvcTest {
         when(customerService.findById(CUSTOMER_ID)).thenReturn(customer);
 
         mockMvc.perform(get(BASE_URL_WITH_CUSTOMER_ID)
+                .accept(APPLICATION_JSON)
                 .contentType(APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id", is(equalTo(CUSTOMER_ID.intValue()))))
@@ -82,6 +84,7 @@ public class CustomerControllerMockMvcTest {
         when(customerService.create(any(CustomerDTO.class))).thenReturn(existingCustomer);
 
         mockMvc.perform(post(BASE_URL)
+                .accept(APPLICATION_JSON)
                 .contentType(APPLICATION_JSON)
                 .content(asJsonString(customerToCreate)))
                 .andExpect(status().isCreated())
@@ -97,6 +100,7 @@ public class CustomerControllerMockMvcTest {
         when(customerService.update(eq(CUSTOMER_ID), any(CustomerDTO.class))).thenReturn(existingCustomer);
 
         mockMvc.perform(put(BASE_URL_WITH_CUSTOMER_ID)
+                .accept(APPLICATION_JSON)
                 .contentType(APPLICATION_JSON)
                 .content(asJsonString(customerToUpdate)))
                 .andExpect(status().isOk())
@@ -112,6 +116,7 @@ public class CustomerControllerMockMvcTest {
         when(customerService.patch(eq(CUSTOMER_ID), any(CustomerDTO.class))).thenReturn(existingCustomer);
 
         mockMvc.perform(patch(BASE_URL_WITH_CUSTOMER_ID)
+                .accept(APPLICATION_JSON)
                 .contentType(APPLICATION_JSON)
                 .content(asJsonString(customerToPatch)))
                 .andExpect(status().isOk())
