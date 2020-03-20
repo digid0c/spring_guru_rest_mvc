@@ -1,8 +1,8 @@
 package guru.samples.rest.mvc.controller.v1;
 
+import guru.samples.rest.mvc.service.CustomerService;
 import guru.samples.rest.mvc.api.v1.model.CustomerDTO;
 import guru.samples.rest.mvc.api.v1.model.CustomerListDTO;
-import guru.samples.rest.mvc.service.CustomerService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;

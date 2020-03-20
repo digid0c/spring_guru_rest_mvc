@@ -2,10 +2,10 @@ package guru.samples.rest.mvc.bootstrap;
 
 import guru.samples.rest.mvc.domain.Category;
 import guru.samples.rest.mvc.domain.Customer;
-import guru.samples.rest.mvc.domain.Vendor;
 import guru.samples.rest.mvc.repository.CategoryRepository;
 import guru.samples.rest.mvc.repository.CustomerRepository;
 import guru.samples.rest.mvc.repository.VendorRepository;
+import guru.samples.rest.mvc.domain.Vendor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;

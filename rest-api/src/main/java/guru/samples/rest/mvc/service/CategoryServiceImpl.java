@@ -1,8 +1,8 @@
 package guru.samples.rest.mvc.service;
 
-import guru.samples.rest.mvc.api.v1.mapper.CategoryMapper;
 import guru.samples.rest.mvc.api.v1.model.CategoryDTO;
 import guru.samples.rest.mvc.repository.CategoryRepository;
+import guru.samples.rest.mvc.api.v1.mapper.CategoryMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
