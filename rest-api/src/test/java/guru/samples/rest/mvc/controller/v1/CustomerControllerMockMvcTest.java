@@ -1,8 +1,8 @@
 package guru.samples.rest.mvc.controller.v1;
 
-import guru.samples.rest.mvc.api.v1.model.CustomerDTO;
 import guru.samples.rest.mvc.exception.ResourceNotFoundException;
 import guru.samples.rest.mvc.exception.handler.RestResponseEntityExceptionHandler;
+import guru.samples.rest.mvc.model.CustomerDTO;
 import guru.samples.rest.mvc.service.CustomerService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -144,17 +144,21 @@ public class CustomerControllerMockMvcTest {
     }
 
     private CustomerDTO createExistingCustomer() {
-        return CustomerDTO.builder()
-                .id(CUSTOMER_ID)
-                .firstName(CUSTOMER_FIRST_NAME)
-                .lastName(CUSTOMER_LAST_NAME)
-                .build();
+        CustomerDTO customerDTO = new CustomerDTO();
+
+        customerDTO.setId(CUSTOMER_ID);
+        customerDTO.setFirstName(CUSTOMER_FIRST_NAME);
+        customerDTO.setLastName(CUSTOMER_LAST_NAME);
+
+        return customerDTO;
     }
 
     private CustomerDTO createIncomingRequestCustomerData() {
-        return CustomerDTO.builder()
-                .firstName(CUSTOMER_FIRST_NAME)
-                .lastName(CUSTOMER_LAST_NAME)
-                .build();
+        CustomerDTO customerDTO = new CustomerDTO();
+
+        customerDTO.setFirstName(CUSTOMER_FIRST_NAME);
+        customerDTO.setLastName(CUSTOMER_LAST_NAME);
+
+        return customerDTO;
     }
 }

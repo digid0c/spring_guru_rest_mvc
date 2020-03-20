@@ -1,8 +1,8 @@
 package guru.samples.rest.mvc.controller.v1;
 
+import guru.samples.rest.mvc.model.CustomerDTO;
+import guru.samples.rest.mvc.model.CustomerListDTO;
 import guru.samples.rest.mvc.service.CustomerService;
-import guru.samples.rest.mvc.api.v1.model.CustomerDTO;
-import guru.samples.rest.mvc.api.v1.model.CustomerListDTO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,7 +30,9 @@ public class CustomerController {
     @GetMapping
     @ResponseStatus(OK)
     public CustomerListDTO findAll() {
-        return new CustomerListDTO(customerService.findAll());
+        CustomerListDTO customerListDTO = new CustomerListDTO();
+        customerListDTO.getCustomers().addAll(customerService.findAll());
+        return customerListDTO;
     }
 
     @ApiOperation(value = "Find a customer with specified ID", notes = "Throws ResourceNotFoundException")

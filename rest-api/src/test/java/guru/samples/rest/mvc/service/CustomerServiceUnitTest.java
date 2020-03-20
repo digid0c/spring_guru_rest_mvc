@@ -1,8 +1,8 @@
 package guru.samples.rest.mvc.service;
 
 import guru.samples.rest.mvc.api.v1.mapper.CustomerMapper;
-import guru.samples.rest.mvc.api.v1.model.CustomerDTO;
 import guru.samples.rest.mvc.domain.Customer;
+import guru.samples.rest.mvc.model.CustomerDTO;
 import guru.samples.rest.mvc.repository.CustomerRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -104,9 +104,11 @@ public class CustomerServiceUnitTest {
     }
 
     private CustomerDTO createIncomingRequestCustomerData() {
-        return CustomerDTO.builder()
-                .firstName(CUSTOMER_FIRST_NAME)
-                .lastName(CUSTOMER_LAST_NAME)
-                .build();
+        CustomerDTO customerDTO = new CustomerDTO();
+
+        customerDTO.setFirstName(CUSTOMER_FIRST_NAME);
+        customerDTO.setLastName(CUSTOMER_LAST_NAME);
+
+        return customerDTO;
     }
 }

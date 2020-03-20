@@ -2,7 +2,7 @@ package guru.samples.rest.mvc.service;
 
 import guru.samples.rest.mvc.exception.ResourceNotFoundException;
 import guru.samples.rest.mvc.api.v1.mapper.CustomerMapper;
-import guru.samples.rest.mvc.api.v1.model.CustomerDTO;
+import guru.samples.rest.mvc.model.CustomerDTO;
 import guru.samples.rest.mvc.repository.CustomerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

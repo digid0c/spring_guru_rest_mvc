@@ -1,10 +1,10 @@
 package guru.samples.rest.mvc.service;
 
 import guru.samples.rest.mvc.api.v1.mapper.CustomerMapper;
-import guru.samples.rest.mvc.api.v1.model.CustomerDTO;
 import guru.samples.rest.mvc.bootstrap.BootstrapDataLoader;
 import guru.samples.rest.mvc.domain.Customer;
 import guru.samples.rest.mvc.exception.ResourceNotFoundException;
+import guru.samples.rest.mvc.model.CustomerDTO;
 import guru.samples.rest.mvc.repository.CategoryRepository;
 import guru.samples.rest.mvc.repository.CustomerRepository;
 import guru.samples.rest.mvc.repository.VendorRepository;
@@ -49,9 +49,8 @@ public class CustomerServiceIntegrationTest {
 
         Customer originalCustomer = customerRepository.findById(customerId)
                 .orElseThrow(ResourceNotFoundException::new);
-        CustomerDTO customerToPatch = CustomerDTO.builder()
-                .firstName(newFirstName)
-                .build();
+        CustomerDTO customerToPatch = new CustomerDTO();
+        customerToPatch.setFirstName(newFirstName);
 
         String originalFirstName = originalCustomer.getFirstName();
         String originalLastName = originalCustomer.getLastName();
@@ -72,9 +71,8 @@ public class CustomerServiceIntegrationTest {
 
         Customer originalCustomer = customerRepository.findById(customerId)
                 .orElseThrow(ResourceNotFoundException::new);
-        CustomerDTO customerToPatch = CustomerDTO.builder()
-                .lastName(newLastName)
-                .build();
+        CustomerDTO customerToPatch = new CustomerDTO();
+        customerToPatch.setLastName(newLastName);
 
         String originalFirstName = originalCustomer.getFirstName();
         String originalLastName = originalCustomer.getLastName();

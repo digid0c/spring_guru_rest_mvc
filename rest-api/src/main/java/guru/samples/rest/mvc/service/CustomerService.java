@@ -1,6 +1,6 @@
 package guru.samples.rest.mvc.service;
 
-import guru.samples.rest.mvc.api.v1.model.CustomerDTO;
+import guru.samples.rest.mvc.model.CustomerDTO;
 
 import java.util.List;
 

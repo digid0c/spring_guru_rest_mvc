@@ -1,7 +1,7 @@
 package guru.samples.rest.mvc.api.v1.mapper;
 
-import guru.samples.rest.mvc.api.v1.model.CustomerDTO;
 import guru.samples.rest.mvc.domain.Customer;
+import guru.samples.rest.mvc.model.CustomerDTO;
 import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.CoreMatchers.*;
@@ -32,11 +32,10 @@ public class CustomerMapperUnitTest {
 
     @Test
     public void shouldMapCustomerDTOToCustomer() {
-        CustomerDTO customerDTO = CustomerDTO.builder()
-                .id(CUSTOMER_ID)
-                .firstName(CUSTOMER_FIRST_NAME)
-                .lastName(CUSTOMER_LAST_NAME)
-                .build();
+        CustomerDTO customerDTO = new CustomerDTO();
+        customerDTO.setId(CUSTOMER_ID);
+        customerDTO.setFirstName(CUSTOMER_FIRST_NAME);
+        customerDTO.setLastName(CUSTOMER_LAST_NAME);
 
         Customer customer = CUSTOMER_MAPPER.customerDTOToCustomer(customerDTO);
 

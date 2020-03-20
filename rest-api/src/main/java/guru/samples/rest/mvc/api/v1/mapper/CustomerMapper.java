@@ -1,7 +1,7 @@
 package guru.samples.rest.mvc.api.v1.mapper;
 
-import guru.samples.rest.mvc.api.v1.model.CustomerDTO;
 import guru.samples.rest.mvc.domain.Customer;
+import guru.samples.rest.mvc.model.CustomerDTO;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
